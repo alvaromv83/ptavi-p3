@@ -16,7 +16,7 @@ try:
 except IndexError:
     print ("Usage: python karaoke.py file.smil")
 
-# Parseo del XML
+# Parseo del fichero SMIL
 parser = make_parser()
 smilHandler = smallsmilhandler.SmallSMILHandler()
 parser.setContentHandler(smilHandler)
