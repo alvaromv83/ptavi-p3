@@ -9,6 +9,7 @@ from xml.sax import make_parser
 from xml.sax.handler import ContentHandler
 import smallsmilhandler
 import sys
+import os
 
 # Toma de datos del usuario
 try:
@@ -32,5 +33,11 @@ for element in tag_list:
         print element + '\t',
     else:
         for key in element:
+            if key == 'src':
+                # Si el atributo es remoto descargamos y acortamos nombre
+                if element[key].split(":")[0] == 'http':
+                    resource = element[key]
+                    os.system("wget -q " + resource)
+                    element[key] = element[key].split("/")[-1]
             print '%s= "%s"\t' % (key, element[key]),
         print
