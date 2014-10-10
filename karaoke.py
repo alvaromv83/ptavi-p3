@@ -11,33 +11,65 @@ import smallsmilhandler
 import sys
 import os
 
-# Toma de datos del usuario
-try:
-    my_file = sys.argv[1]
-except IndexError:
-    print ("Usage: python karaoke.py file.smil")
 
-# Parseo del fichero SMIL
-parser = make_parser()
-smilHandler = smallsmilhandler.SmallSMILHandler()
-parser.setContentHandler(smilHandler)
-parser.parse(open(my_file))
+class KaraokeLocal(smallsmilhandler.SmallSMILHandler):
+    """
+    Clase KaraokeLocal
+    """
 
-# Creación de lista
-tag_list = smilHandler.get_tags()
+    def __init__(self, my_file):
+        """
+        Constructor. Parsea el fichero SMIL y obtiene etiquetas y atributos.
+        """
+        # Parseo del fichero SMIL
+        parser = make_parser()
+        smilHandler = smallsmilhandler.SmallSMILHandler()
+        parser.setContentHandler(smilHandler)
+        parser.parse(open(my_file))
 
-# Impresión de lista con formato
-for element in tag_list:
-    # Si el índice es par el elemento es etiqueta, si es impar es atributo
-    if not tag_list.index(element) % 2:
-        print element + '\t',
-    else:
-        for key in element:
-            if key == 'src':
-                # Si el atributo es remoto descargamos y acortamos nombre
-                if element[key].split(":")[0] == 'http':
-                    resource = element[key]
-                    os.system("wget -q " + resource)
-                    element[key] = element[key].split("/")[-1]
-            print '%s= "%s"\t' % (key, element[key]),
-        print
+        # Creación de lista con etiquetas y atributos
+        self.tag_list = smilHandler.get_tags()
+
+    def __str__(self):
+        """
+        Método que imprime lista de etiquetas y atributos.
+        """
+        for element in self.tag_list:
+            # Índice par: etiqueta; índice impar: atributo
+            if not self.tag_list.index(element) % 2:
+                print element + '\t',
+            else:
+                for key in element:
+                    print '%s= "%s"\t' % (key, element[key]),
+                print
+
+    def do_local(self):
+        """
+        Método que descarga recursos remotos e indica recurso en local.
+        """
+        for element in self.tag_list:
+            # Miramos índices impares (atributos)
+            if self.tag_list.index(element) % 2:
+                for key in element:
+                    if key == 'src':
+                        if element[key].split(":")[0] == 'http':
+                            os.system("wget -q " + element[key])
+                            element[key] = element[key].split("/")[-1]
+
+if __name__ == "__main__":
+    # Toma de datos del usuario
+    try:
+        my_file = sys.argv[1]
+    except IndexError:
+        print ("Usage: python karaoke.py file.smil")
+
+    # Instanciación del objeto
+    karaoke = KaraokeLocal(my_file)
+
+    # Impresión de lista de etiquetas y atributos
+    tag_list = karaoke.__str__()
+
+    # Descarga de atributos remotos e impresión de lista con recursos en local
+    print
+    tag_list = karaoke.do_local()
+    tag_list = karaoke.__str__()
