@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Práctica 3. SMIL, XML en Python
-# Ejercicio 4. Lee archivo .smil y devuelve lista con etiquetas y atributos
+# Ej 6. Lee archivo .smil, descarga recursos remotos e imprime lista. OO.
 # Autor: Álvaro Moles Vinader
 
 from xml.sax import make_parser
