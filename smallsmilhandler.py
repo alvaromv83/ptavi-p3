@@ -16,14 +16,8 @@ class SmallSMILHandler(ContentHandler):
 
     def __init__(self):
         """
-        Constructor. Inicializamos las variables.
+        Constructor. Inicializa la lista de etiquetas y atributos.
         """
-        self.root_layout_attrs = {}
-        self.region_attrs = {}
-        self.img_attrs = {}
-        self.audio_attrs = {}
-        self.textstream_attrs = {}
-
         self.tag_list = []
 
     def startElement(self, name, attrs):
@@ -33,58 +27,57 @@ class SmallSMILHandler(ContentHandler):
         if name == 'root-layout':
             self.tag_list.append(name)
 
-            self.width = attrs.get('width', "")
-            self.height = attrs.get('height', "")
-            self.backgnd_color = attrs.get('background-color', "")
-            self.root_layout_attrs = {'width': self.width,
-                'height': self.height, 'background-color': self.backgnd_color}
+            width = attrs.get('width', "")
+            height = attrs.get('height', "")
+            backgnd_color = attrs.get('background-color', "")
+            root_layout_attrs = {'width': width, 'height': height,
+                'background-color': backgnd_color}
 
-            self.tag_list.append(self.root_layout_attrs)
+            self.tag_list.append(root_layout_attrs)
 
         elif name == 'region':
             self.tag_list.append(name)
 
-            self.id = attrs.get('id', "")
-            self.top = attrs.get('top', "")
-            self.bottom = attrs.get('bottom', "")
-            self.left = attrs.get('left', "")
-            self.right = attrs.get('right', "")
-            self.region_attrs = {'id': self.id, 'top': self.top,
-                'bottom': self.bottom, 'left': self.left, 'right': self.right}
+            ident = attrs.get('id', "")
+            top = attrs.get('top', "")
+            bottom = attrs.get('bottom', "")
+            left = attrs.get('left', "")
+            right = attrs.get('right', "")
+            region_attrs = {'id': ident, 'top': top, 'bottom': bottom,
+                'left': left, 'right': right}
 
-            self.tag_list.append(self.region_attrs)
+            self.tag_list.append(region_attrs)
 
         elif name == 'img':
             self.tag_list.append(name)
 
-            self.src = attrs.get('src', "")
-            self.region = attrs.get('region', "")
-            self.begin = attrs.get('begin', "")
-            self.dur = attrs.get('dur', "")
-            self.img_attrs = {'src': self.src, 'region': self.region,
-                'begin': self.begin, 'dur': self.dur}
+            src = attrs.get('src', "")
+            region = attrs.get('region', "")
+            begin = attrs.get('begin', "")
+            dur = attrs.get('dur', "")
+            img_attrs = {'src': src, 'region': region, 'begin': begin,
+                'dur': dur}
 
-            self.tag_list.append(self.img_attrs)
+            self.tag_list.append(img_attrs)
 
         elif name == 'audio':
             self.tag_list.append(name)
 
-            self.src = attrs.get('src', "")
-            self.begin = attrs.get('begin', "")
-            self.dur = attrs.get('dur', "")
-            self.audio_attrs = {'src': self.src, 'begin': self.begin,
-                'dur': self.dur}
+            src = attrs.get('src', "")
+            begin = attrs.get('begin', "")
+            dur = attrs.get('dur', "")
+            audio_attrs = {'src': src, 'begin': begin, 'dur': dur}
 
-            self.tag_list.append(self.audio_attrs)
+            self.tag_list.append(audio_attrs)
 
         elif name == 'textstream':
             self.tag_list.append(name)
 
-            self.src = attrs.get('src', "")
-            self.region = attrs.get('region', "")
-            self.textstream_attrs = {'src': self.src, 'region': self.region}
+            src = attrs.get('src', "")
+            region = attrs.get('region', "")
+            textstream_attrs = {'src': src, 'region': region}
 
-            self.tag_list.append(self.textstream_attrs)
+            self.tag_list.append(textstream_attrs)
 
     def get_tags(self):
         """
