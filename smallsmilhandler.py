@@ -11,7 +11,7 @@ from xml.sax.handler import ContentHandler
 
 class SmallSMILHandler(ContentHandler):
     """
-    Clase
+    Clase SmallSMILHander
     """
 
     def __init__(self):
