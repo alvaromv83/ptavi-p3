@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Práctica 3. SMIL, XML en Python
-# Ej 6. Lee archivo .smil, descarga recursos remotos e imprime lista. OO.
+# Ej 6. Lee archivo .smil, descarga recursos remotos e imprime lista.
 # Autor: Álvaro Moles Vinader
 
 from xml.sax import make_parser
@@ -21,27 +21,28 @@ class KaraokeLocal(smallsmilhandler.SmallSMILHandler):
         """
         Constructor. Parsea el fichero SMIL y obtiene etiquetas y atributos.
         """
-        # Parseo del fichero SMIL
         parser = make_parser()
         smilHandler = smallsmilhandler.SmallSMILHandler()
         parser.setContentHandler(smilHandler)
         parser.parse(open(my_file))
 
-        # Creación de lista con etiquetas y atributos
         self.tag_list = smilHandler.get_tags()
 
     def __str__(self):
         """
         Método que imprime lista de etiquetas y atributos.
         """
+        tag_list = ""
         for element in self.tag_list:
             # Índice par: etiqueta; índice impar: atributo
             if not self.tag_list.index(element) % 2:
-                print element + '\t',
+                tag_list += element + '\t'
             else:
                 for key in element:
-                    print '%s= "%s"\t' % (key, element[key]),
-                print
+                    if element[key] != "":
+                        tag_list += '%s="%s"\t' % (key, element[key])
+                tag_list += '\n'
+        return tag_list
 
     def do_local(self):
         """
@@ -67,9 +68,8 @@ if __name__ == "__main__":
     karaoke = KaraokeLocal(my_file)
 
     # Impresión de lista de etiquetas y atributos
-    tag_list = karaoke.__str__()
+    print karaoke
 
     # Descarga de atributos remotos e impresión de lista con recursos en local
-    print
-    tag_list = karaoke.do_local()
-    tag_list = karaoke.__str__()
+    karaoke.do_local()
+    print karaoke
